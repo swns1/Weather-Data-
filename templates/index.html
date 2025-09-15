@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Weather Forecast</h1>
+            <p class="hero-subtitle">Get accurate 24-hour weather updates for any location worldwide</p>
+        </section>
+
+        <!-- Search Form -->
+        <section class="search-container">
+            <form action="{{ url_for('home') }}" method="POST" class="search-form">
+                {{ form.csrf_token }}
+                {{ form.city(class="form-control", placeholder="Enter city name...") }}
+                {{ form.submit(class="btn btn-primary", value="Get Weather") }}
+            </form>
+        </section>
+
+        <!-- Weather Display -->
+        {% if weather %}
+        <section id="forecast" class="weather-section">
+            <div class="weather-header">
+                <h2 class="weather-location">{{ city.city }}, {{ city.country }}</h2>
+            </div>
+            
+            {% for weather_data in weather %}
+            <div class="weather-card">
+                <div class="weather-description">
+                    <img src="{{ weather_data.icon }}" alt="{{ weather_data['descrip'] }}" width="60" height="60">
+                    <span class="description-text">{{ weather_data["descrip"] }}</span>
+                </div>
+                
+                <div class="temperature">{{ weather_data["temp"] }}°C</div>
+                
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <strong>Wind:</strong> {{ weather_data["speed"] }} km/h
+                    </div>
+                    <div class="weather-detail">
+                        <strong>Humidity:</strong> {{ weather_data["humidity"] }}%
+                    </div>
+                    <div class="weather-detail">
+                        <strong>Gust:</strong> {{ weather_data["gust"] }} km/h
+                    </div>
+                    <div class="weather-detail">
+                        <strong>Feels like:</strong> {{ weather_data["temp"] }}°C
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+    </main>
+{% endblock %}
