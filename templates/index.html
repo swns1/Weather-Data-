@@ -1,6 +1,16 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App - Get Real-time Weather Updates</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body id="weather-body">
+    <!-- Header -->
+    {% include "header.html" %}
 
-{% block content %}
+    <!-- Main Content -->
     <main class="main-content">
         <!-- Hero Section -->
         <section class="hero-section">
@@ -52,4 +62,42 @@
         </section>
         {% endif %}
     </main>
-{% endblock %}
+
+    <!-- Footer -->
+    {% include "footer.html" %}
+
+    <script>
+        // Dynamic background based on weather condition
+        function updateBackground() {
+            const weatherCards = document.querySelectorAll('.weather-card');
+            const body = document.getElementById('weather-body');
+            
+            if (weatherCards.length > 0) {
+                const firstWeatherCard = weatherCards[0];
+                const description = firstWeatherCard.querySelector('.description-text').textContent.toLowerCase();
+                
+                // Remove existing weather classes
+                body.className = body.className.replace(/\b(sunny|rainy|cloudy|stormy|snowy|clear)\b/g, '');
+                
+                // Add appropriate class based on weather description
+                if (description.includes('rain') || description.includes('drizzle')) {
+                    body.classList.add('rainy');
+                } else if (description.includes('sun') || description.includes('clear')) {
+                    body.classList.add('sunny');
+                } else if (description.includes('cloud')) {
+                    body.classList.add('cloudy');
+                } else if (description.includes('storm') || description.includes('thunder')) {
+                    body.classList.add('stormy');
+                } else if (description.includes('snow')) {
+                    body.classList.add('snowy');
+                } else {
+                    body.classList.add('clear');
+                }
+            }
+        }
+        
+        // Update background when page loads
+        document.addEventListener('DOMContentLoaded', updateBackground);
+    </script>
+</body>
+</html>
